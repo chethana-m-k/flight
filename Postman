@@ -1,0 +1,59 @@
+
+
+Postman is a tool used to test, send, and check APIs by making HTTP requests (GET, POST, PUT, DELETE) without using a frontend.
+
+
+1.POST  : 
+        http://localhost:8080/api/flights
+
+
+Send Data in JSON Format
+
+{
+  "id": 1,
+  "flightCode": "AI101",
+  "airlineName": "Air India",
+  "source": "Delhi",
+  "destination": "Mumbai",
+  "fare": 4500,
+  "duration": "2h"
+}
+
+
+GET :
+     http://localhost:8080/api/flights
+GET :
+    http://localhost:8080/api/flights/1              //by id geting
+PUT:
+     http://localhost:8080/api/flights/1  
+{
+  "id": 1,
+  "flightCode": "AI103",
+  "airlineName": "Air India",
+  "source": "Mysore",
+  "destination": "Mumbai",
+  "fare": 2500,
+  "duration": "1h"
+}
+
+
+DELETE :
+       http://localhost:8080/api/flights/101           //by id deleting
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
