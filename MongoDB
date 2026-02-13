@@ -1,0 +1,174 @@
+                                                             MTD
+                                                        Flight Project
+
+
+
+Introduction
+Mini Workflow
+
+mongosh
+use flightDB
+db.flights.insertOne({...})
+db.flights.find()
+db.flights.updateOne(...)
+db.flights.deleteOne(...)
+exit
+// MongoDB workflow starts with mongosh, selects a database using use, enforces uniqueness with createIndex, performs CRUD using insert, find, update, delete, and ends with exit
+
+
+
+1.	//Start Mongo Shell
+                 Mongosh
+                              // If MongoDB is installed properly, you will see
+                                  test>
+2.	//Select / Create Database
+use flightDB            // selects the flightDB database or creates it if it does not exist.
+
+3.	Insert Data (Create)
+
+a)	 Insert One Flight   // inserts a new flight document into the flights collection                                                 
+                                                                 db.flights.insertOne({
+                                                                id: 1,
+                                                                flight_code: "AI101",
+                                                               airline_name: "Air India",
+                                                                source: "Bangalore",
+                                                                destination: "Delhi",
+                                                                 fare: 5500,
+                                                                 duration: "2h 30m"
+                                      });
+
+b)	Insert Many Flights
+                 db.flights.insertMany([
+  {
+    id: 2,
+    flight_code: "IND202",
+    airline_name: "IndiGo",
+    source: "Mumbai",
+    destination: "Chennai",
+    fare: 4200,
+    duration: "1h 50m"
+  },
+  {
+    id: 3,
+    flight_code: "VT303",
+    airline_name: "Vistara",
+    source: "Hyderabad",
+    destination: "Pune",
+    fare: 4800,
+    duration: "1h 20m"
+  }
+]);
+
+c)	//Insert Flight Using id
+// makes the id field unique so that duplicate IDs are not allowed.
+// Custom Unique Field
+
+db.flights.createIndex({ id: 1 }, { unique: true });
+
+👉 Insert if id not exists
+👉 Update if id exists
+
+db.flights.insertOne({
+  id: 3,
+  flight_code: "AI900",
+  airline_name: "Air India",
+  source: "Bangalore",
+  destination: "Delhi",
+  fare: 6000,
+  duration: "2h 20m"
+});
+                                             
+
+4.	View Data (Read) 
+a)	Show All Flights // displays all flight records stored in the collection.
+                                                                         db.flights.find()
+                                                                                      Pretty Format
+                                                                                                   db.flights.find().pretty()
+
+b)	Find by ID // retrieves the flight record whose id is 1
+                                                                    db.flights.findOne({ id: 1 })
+c)	Find by Source
+                    db.flights.find({ source: "Mumbai" })
+d)	Fare Less Than 5000
+             db.flights.find({ fare: { $lt: 5000 } })
+
+5.	 Update Data
+                        
+a)	Update Fare // updates the fare of the flight whose id is 1
+                        db.flights.updateOne(
+                                   { id: 1 },
+                                   { $set: { fare: 6000 } }
+                            );
+b)	Increase Fare for All
+                             db.flights.updateMany(
+                                      {},
+                                     { $inc: { fare: 300 } }
+                               );
+c)	Change Destination
+                                db.flights.updateOne(
+                                       { flight_code: "IND202" },
+                                       { $set: { destination: "Goa" } }
+                                 );
+6.	Delete Data
+                     
+a)	Delete One // deletes the flight record whose id is 3
+db.flights.deleteOne({ id: 3 });
+b)	Delete Many
+db.flights.deleteMany({ source: "Mumbai" });
+7.	Sort & Limit
+                               Sort by Fare
+a)	Low → High
+                           db.flights.find().sort({ fare: 1 });
+b)	High → Low
+                           db.fights.find().sort({ fare: -1 });
+c)	Limit
+                         db.flights.find().limit(2);
+
+8.	Count Records
+          db.flights.countDocuments();
+9.	Create Index (Fast Search)
+          db.flights.createIndex({ flight_code: 1 });
+10.	Exit Mongo Shell
+           exit                       OR               Ctrl + C
+
+note:
+
+1._id Is Always Unique (By Default)
+Every MongoDB document has an _id field automatically.
+Example:
+{
+  _id: ObjectId("65abc123..."),
+  id: 101,
+  flight_code: "AI900",
+  ...
+}
+2.Composite Unique Index (Multiple Fields Unique Together)
+You can make two fields together unique.
+Example: flight_code + date should not repeat.
+db.flights.createIndex(
+  { flight_code: 1, source: 1 },
+  { unique: true }
+);
+3. Unique + Sparse (Allow Null Values)
+If some records don’t have id, use sparse.
+db.flights.createIndex(
+  { id: 1 },
+  { unique: true, sparse: true }
+);
+4. Check Existing Indexes
+To see all indexes:
+db.flights.getIndexes();
+
+
+
+                   
+
+
+
+
+
+
+
+
+
+
